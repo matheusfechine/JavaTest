@@ -14,5 +14,9 @@ public class LogService {
 		return dao.findBy(startDate, duration, threshold);
 	}
 
+	public void insert(Log log) {
+		dao.insert(log);
+	}
+
 
 }

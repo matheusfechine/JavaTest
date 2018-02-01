@@ -1,13 +1,15 @@
-package com.ef.unit;
+package com.ef.unit.service;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import static org.junit.Assert.*;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +21,7 @@ import com.ef.dao.LogDao;
 import com.ef.model.Log;
 import com.ef.service.LogService;
 
-public class Parser {
+public class LogServiceTest {
 
 	private Log log;
 	
@@ -55,9 +57,9 @@ public class Parser {
 	}
 
 	@Test
-	public void shouldListLogs(){
+	public void shouldListLogsByParameters(){
 		when(dao.findBy(any(Date.class), anyString(), anyInt())).thenReturn(Arrays.asList(log));
-		service.findBy(new DateTime()
+		List<Log> logs = service.findBy(new DateTime()
 				.withYear(2017)
 				.withDayOfMonth(1)
 				.withMonthOfYear(1)
@@ -66,6 +68,13 @@ public class Parser {
 				.withSecondOfMinute(0)
 				.withMillisOfSecond(0)
 				.toDate(), "hourly", 100);
+		assertEquals(Arrays.asList(log), logs);
+	}
+	
+	@Test
+	public void shouldInsertLogsFromFile(){
+		service.insert(log);
+		verify(dao).insert(log);
 	}
 	
 }

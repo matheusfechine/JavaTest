@@ -11,4 +11,7 @@ public class LogDao {
 		return null;
 	}
 
+	public void insert(Log log){
+	}
+
 }
