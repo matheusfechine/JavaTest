@@ -1,6 +1,5 @@
 package com.ef.service.parse;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -13,8 +12,7 @@ public class FileToEntity {
 		String[] tokens = line.split("\\|+");
 
 		Log log = new Log();
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		log.setStartDate(format.parse(tokens[0]));
+		log.setStartDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tokens[0]));
 		log.setIpAddress(tokens[1]);
 		log.setHttpMethod(tokens[2]);
 		log.setHttpStatus(Integer.valueOf(tokens[3]));

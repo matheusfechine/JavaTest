@@ -1,15 +1,17 @@
 package com.ef.unit.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,24 +59,16 @@ public class LogServiceTest {
 	}
 
 	@Test
-	public void shouldListLogsByParameters(){
+	public void shouldListLogsByParameters() throws Exception{
 		when(dao.findBy(any(Date.class), anyString(), anyInt())).thenReturn(Arrays.asList(log));
-		List<Log> logs = service.findBy(new DateTime()
-				.withYear(2017)
-				.withDayOfMonth(1)
-				.withMonthOfYear(1)
-				.withHourOfDay(13)
-				.withMinuteOfHour(0)
-				.withSecondOfMinute(0)
-				.withMillisOfSecond(0)
-				.toDate(), "hourly", 100);
+		List<Log> logs = service.findBy("2017-01-01.13:00:00", "hourly", "100");
 		assertEquals(Arrays.asList(log), logs);
 	}
 	
 	@Test
-	public void shouldInsertLogsFromFile(){
-		service.insert(log);
-		verify(dao).insert(log);
+	public void shouldInsertLogsFromFile() throws Exception{
+		service.insert(Arrays.asList("test"));
+		verify(dao).insert(anyList());
 	}
 	
 }
