@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.ef.model.Log;
 import com.ef.service.parse.FileToEntity;
+import com.ef.service.parse.exception.FileToEntityException;
 
 public class FileToEntityTest {
 
@@ -41,11 +42,17 @@ public class FileToEntityTest {
 	}
 	
 	@Test
-	public void shouldTransformLineToLog() throws ParseException {
+	public void shouldTransformLineToLog() throws ParseException, FileToEntityException {
 		String line = "2017-01-01 00:00:11.763|192.168.234.82|\"GET / HTTP/1.1\"|200|\"swcd (unknown version) CFNetwork/808.2.16 Darwin/15.6.0\"";
 		Log lineTransformed = fileToEntity.transform(line);
 		assertEquals(lineTransformed.toString(), log.toString());
 		
 	}
 	
+	@Test(expected=FileToEntityException.class)
+	public void shouldThrowFileToEntityException() throws FileToEntityException {
+		String line = "XXX|192.168.234.82|\"GET / HTTP/1.1\"|200|\"swcd (unknown version) CFNetwork/808.2.16 Darwin/15.6.0\"";
+		fileToEntity.transform(line);
+
+	}
 }

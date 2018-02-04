@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +13,9 @@ import org.joda.time.DateTime;
 import com.ef.dao.connection.DataBaseConnectionFactory;
 import com.ef.dao.enumeration.Duration;
 import com.ef.model.Log;
+import com.ef.service.exception.LogException;
 import com.ef.service.parse.FileToEntity;
+import com.ef.service.parse.exception.FileToEntityException;
 
 public class LogDao {
 
@@ -60,7 +61,7 @@ public class LogDao {
 		return logs;
 	}
 
-	public void insert(List<String> lines) throws Exception {
+	public void insert(List<String> lines) throws LogException {
 		initTransformer();
 		Connection c = null;
 		PreparedStatement stmt =null;
@@ -83,10 +84,15 @@ public class LogDao {
 			c.commit();
 			c.close();
 		} catch (SQLException e) {
-			throw new Exception("Database Issue!");
-		} finally {
-			c.close();
-			stmt.close();
+			//throw new SQLException("Database Issue!");
+		}catch(FileToEntityException e) {
+			throw new LogException("Unable to insert Log: "+e.getMessage());
+		}finally {
+			try {
+				c.close();
+				stmt.close();
+			} catch (SQLException e) {
+			}
 		}
 
 	}

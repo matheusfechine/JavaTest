@@ -5,8 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 import com.ef.dao.LogDao;
 import com.ef.model.Log;
 import com.ef.service.LogService;
+import com.ef.service.exception.LogException;
 
 public class LogServiceTest {
 
@@ -71,4 +71,11 @@ public class LogServiceTest {
 		verify(dao).insert(anyList());
 	}
 	
+	@Test(expected=LogException.class)
+	public void shouldThrowLogExceptionOnInsert() throws LogException {
+		doThrow(LogException.class).when(dao).insert(anyList());
+		dao.insert(Arrays.asList("test"));
+		
+		
+	}
 }

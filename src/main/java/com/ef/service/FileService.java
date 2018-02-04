@@ -1,20 +1,26 @@
 package com.ef.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.ef.service.exception.FileException;
 
 public class FileService {
 
-	private LogService logService;
-
-	public void loadAndPersist(List<String> lines) throws Exception {
-		initService();
-		logService.insert(lines);
-	}
-
-	private void initService() {
-		if (logService == null) {
-			logService = new LogService();
+	public List<String> load(BufferedReader bufferedReader) throws FileException {
+		List<String> lines = new ArrayList<String>();
+		try {
+			String line = "";
+			while((line = bufferedReader.readLine()) != null){
+				lines.add(line);
+			}
+			bufferedReader.close();
+		} catch (IOException e) {
+			throw new FileException("Unable to read file: "+e.getMessage());
 		}
+		return lines;
 	}
 
 }

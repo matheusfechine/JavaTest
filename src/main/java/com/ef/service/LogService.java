@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ef.dao.LogDao;
 import com.ef.model.Log;
+import com.ef.service.exception.LogException;
 import com.ef.service.utils.LogUtils;
 
 public class LogService {
@@ -16,7 +17,7 @@ public class LogService {
 		return dao.findBy(utils.parseToData(startDate), duration, utils.parseToInteger(threshold));
 	}
 
-	public void insert(List<String> lines) throws Exception {
+	public void insert(List<String> lines) throws LogException {
 		initDependencies();
 		dao.insert(lines);
 	}
