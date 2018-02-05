@@ -14,12 +14,14 @@ public class LogService {
 	
 	public List<Log> findBy(String startDate, String duration, String threshold) throws Exception {
 		initDependencies();
-		return dao.findBy(utils.parseToData(startDate), duration, utils.parseToInteger(threshold));
+		return dao.findBy(startDate, duration, utils.parseToInteger(threshold));
 	}
 
 	public void insert(List<String> lines) throws LogException {
 		initDependencies();
-		dao.insert(lines);
+		if(!dao.hasAlreadyLoaded()){
+			dao.insert(lines);
+		}
 	}
 
 	private void initDependencies() {
@@ -29,6 +31,10 @@ public class LogService {
 		if(utils == null){
 			utils = new LogUtils();
 		}
+	}
+
+	public void insertIntoBlockList(String ipAddress, String comment) throws LogException {
+		dao.insertIntoBlockList(ipAddress, comment);
 	}
 	
 }

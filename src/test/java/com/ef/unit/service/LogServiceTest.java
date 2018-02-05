@@ -1,14 +1,12 @@
 package com.ef.unit.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -60,7 +58,7 @@ public class LogServiceTest {
 
 	@Test
 	public void shouldListLogsByParameters() throws Exception{
-		when(dao.findBy(any(Date.class), anyString(), anyInt())).thenReturn(Arrays.asList(log));
+		when(dao.findBy(anyString(), anyString(), anyInt())).thenReturn(Arrays.asList(log));
 		List<Log> logs = service.findBy("2017-01-01.13:00:00", "hourly", "100");
 		assertEquals(Arrays.asList(log), logs);
 	}
@@ -74,8 +72,25 @@ public class LogServiceTest {
 	@Test(expected=LogException.class)
 	public void shouldThrowLogExceptionOnInsert() throws LogException {
 		doThrow(LogException.class).when(dao).insert(anyList());
-		dao.insert(Arrays.asList("test"));
-		
-		
+		service.insert(Arrays.asList("test"));
+	}
+	
+	@Test
+	public void shouldDoNothingWhenLogFileIsAlreadyLoaded() throws LogException{
+		when(dao.hasAlreadyLoaded()).thenReturn(true);
+		service.insert(Arrays.asList("test"));
+		verify(dao, times(0)).insert(anyList());
+	}
+	
+	@Test
+	public void shouldInsertAnIpIntoBlockTable() throws LogException{
+		service.insertIntoBlockList("ipAddress", "comment");
+		verify(dao, times(1)).insertIntoBlockList(anyString(), anyString());
+	}
+	
+	@Test(expected=LogException.class)
+	public void shouldThrowExceptionWhenOcccurSomeDatabaseConnection() throws LogException{
+		doThrow(LogException.class).when(dao).insertIntoBlockList(anyString(), anyString());
+		service.insertIntoBlockList("ipAddress", "comment");
 	}
 }
