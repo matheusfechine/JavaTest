@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DataBaseConnectionFactory {
 
 	public Connection getConnection() throws SQLException{
-		return DriverManager.getConnection("jdbc:mysql://localhost/javatest", "root", "root");
+		return DriverManager.getConnection("jdbc:mysql://localhost/javatest?useSSL=false", "root", "root");
 	}
 	
 }

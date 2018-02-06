@@ -102,13 +102,12 @@ public class LogDao {
 			c = new DataBaseConnectionFactory().getConnection();
 			stmt = c.prepareStatement(sql.toString());
 			ResultSet rs = stmt.executeQuery();
-			if (!rs.next()) {
-				return false;
-			}
+			rs.next();
+			int numberOfRecords = rs.getInt(1);
 			rs.close();
-			stmt.close();
 			c.close();
-			return true;
+			stmt.close();
+			return numberOfRecords>0;
 		} catch (SQLException e) {
 			throw new LogException("Unable to insert Log: "+e.getMessage());
 		}finally {
