@@ -32,7 +32,7 @@ public class Parser {
 			List<Log> ipsFound = logService.findBy(startDate, duration, threshold);
 			
 			for (Log log : ipsFound) {
-				String comment = "Ip "+log.getIpAddress()+" was blocked because exceeded "+ threshold+ " times "+duration;
+				String comment = "IP "+log.getIpAddress()+" was blocked because exceeded "+ threshold+ " times "+duration;
 				logService.insertIntoBlockList(log.getIpAddress(), comment);
 				System.out.println(comment);
 			}
