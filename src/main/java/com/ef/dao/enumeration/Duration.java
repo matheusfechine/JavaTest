@@ -1,5 +1,8 @@
 package com.ef.dao.enumeration;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum Duration {
 
 	HOURLY(1, "hourly"), DAILY(24, "daily");
@@ -21,12 +24,11 @@ public enum Duration {
 	}
 	
 	public static Duration getBy(String description){
-		for (Duration duration : Duration.values()) {
-			if(description.equals(duration.getDescription())){
-				return duration;
-			}
-		}
-		return null;
+		return get(description, Duration.values()).orElse(null);
+	}
+	
+	private static Optional<Duration> get(String description, Duration[] values){
+		return Arrays.stream(values).filter(argument -> argument.getDescription().equals(description)).findFirst();
 	}
 
 }
