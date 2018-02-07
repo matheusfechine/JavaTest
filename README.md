@@ -12,6 +12,7 @@ Deliverables
     java -cp "parser.jar" com.ef.Parser --accesslog=/path/to/file --startDate=2017-01-01.13:00:00 --duration=hourly --threshold=100
 
 **NOTE**
+
 I am assuming to pass entire path of the file in --accesslog parameter. EX: *--accesslog=/path/to/file/access.log* 
      
 *You can find the jar file located at root of the project*
